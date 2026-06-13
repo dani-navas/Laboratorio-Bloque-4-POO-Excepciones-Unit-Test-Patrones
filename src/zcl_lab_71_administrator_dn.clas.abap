@@ -14,6 +14,6 @@ ENDCLASS.
 
 CLASS zcl_lab_71_administrator_dn IMPLEMENTATION.
   METHOD on_notificacion_articulo.
-    me->notificacion_admin = ev_titulo.
+    me->notificacion_admin = |Notificación para los Administradores: { ev_titulo }| .
   ENDMETHOD.
 ENDCLASS.

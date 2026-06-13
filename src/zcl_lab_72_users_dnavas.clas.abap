@@ -11,6 +11,6 @@ ENDCLASS.
 
 CLASS zcl_lab_72_users_dnavas IMPLEMENTATION.
   METHOD on_notificacion_articulo.
-    me->notificacion_user = ev_titulo.
+    me->notificacion_user = |Notificación para los Usuarios: { ev_titulo }| .
   ENDMETHOD.
 ENDCLASS.

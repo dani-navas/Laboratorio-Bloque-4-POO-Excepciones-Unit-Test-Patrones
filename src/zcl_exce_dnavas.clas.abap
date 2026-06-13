@@ -135,42 +135,42 @@ CLASS zcl_exce_dnavas IMPLEMENTATION.
 
 
 *PATRÓN DISEÑO OBSERVER
-*
-*    DATA(Lo_BLOG) = NEW zcl_lab_69_blog_dnavas( ).
-*    DATA(Lo_ADMIN) = NEW zcl_lab_71_administrator_dn( ).
-*    DATA(Lo_USER) = NEW zcl_lab_72_users_dnavas( ).
-*
-*    SET HANDLER lo_admin->on_notificacion_articulo FOR Lo_BLOG.
-*    SET HANDLER lo_user->on_notificacion_articulo FOR Lo_BLOG.
-*
-*    lo_blog->titulo_articulo( i_titulo = 'Artículo de Deportes-16.06.2026-12:50' ).
-*    out->write( lo_blog->get_titulo_articulo(  ) ).
-*    out->write( |Notificación para los Administradores: { lo_admin->notificacion_admin } | ).
-*    out->write( |Notificación para los Usuarios: { lo_user->notificacion_user } | ).
-*
-*    lo_blog->titulo_articulo( i_titulo = 'Artículo de Economía-25.10.2026-15:33' ).
-*    out->write( lo_blog->get_titulo_articulo(  ) ).
-*    out->write( |Notificación para los Administradores: { lo_admin->notificacion_admin } | ).
-*    out->write( |Notificación para los Usuarios: { lo_user->notificacion_user } | ).
+
+    DATA(Lo_BLOG) = NEW zcl_lab_69_blog_dnavas( ).
+    DATA(Lo_ADMIN) = NEW zcl_lab_71_administrator_dn( ).
+    DATA(Lo_USER) = NEW zcl_lab_72_users_dnavas( ).
+
+    SET HANDLER lo_admin->on_notificacion_articulo FOR Lo_BLOG.
+    SET HANDLER lo_user->on_notificacion_articulo FOR Lo_BLOG.
+
+    lo_blog->titulo_articulo( i_titulo = 'Artículo de Deportes-16.06.2026-12:50' ).
+    out->write( lo_blog->get_titulo_articulo(  ) ).
+    out->write( lo_admin->notificacion_admin  ).
+    out->write( lo_user->notificacion_user ).
+    out->write(  cl_abap_char_utilities=>newline ).
+    lo_blog->titulo_articulo( i_titulo = 'Artículo de Economía-25.10.2026-15:33' ).
+    out->write( lo_blog->get_titulo_articulo(  ) ).
+    out->write( lo_admin->notificacion_admin  ).
+    out->write( lo_user->notificacion_user ).
 
 
 
 *MODE->VIEW->CONTROLLER
-    DATA(lo_model) = NEW  zcl_lab_73_model_dnavas( ).
-    DATA(lo_view)  = NEW zcl_lab_74_view_dnavas( ).
-    DATA(lo_controller) = NEW zcl_lab_75_controller_dnavas( ).
-
-    lo_controller->set_model( i_model = lo_model ).
-    lo_controller->get_model( )->set_carrier_id( i_carrier_id = 'AA' ).
-    lo_controller->get_model( )->get_table_flight(
-      RECEIVING
-        rt_flight = DATA(lt_flight)
-    ).
-    lo_controller->set_view( i_view = lo_view ).
-    lo_controller->get_view( )->visualizar_vuelos(
-      it_flight = lt_flight
-      i_print   = out
-    ).
+*    DATA(lo_model) = NEW  zcl_lab_73_model_dnavas( ).
+*    DATA(lo_view)  = NEW zcl_lab_74_view_dnavas( ).
+*    DATA(lo_controller) = NEW zcl_lab_75_controller_dnavas( ).
+*
+*    lo_controller->set_model( i_model = lo_model ).
+*    lo_controller->get_model( )->set_carrier_id( i_carrier_id = 'AA' ).
+*    lo_controller->get_model( )->get_table_flight(
+*      RECEIVING
+*        rt_flight = DATA(lt_flight)
+*    ).
+*    lo_controller->set_view( i_view = lo_view ).
+*    lo_controller->get_view( )->visualizar_vuelos(
+*      it_flight = lt_flight
+*      i_print   = out
+*    ).
 
 
   ENDMETHOD.
