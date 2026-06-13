@@ -6,6 +6,7 @@ CLASS zcl_exce_dnavas DEFINITION
     INTERFACES if_oo_adt_classrun.
   PROTECTED SECTION.
   PRIVATE SECTION.
+    DATA i_adt TYPE REF TO if_oo_adt_classrun_out.
 ENDCLASS.
 
 CLASS zcl_exce_dnavas IMPLEMENTATION.
@@ -72,21 +73,104 @@ CLASS zcl_exce_dnavas IMPLEMENTATION.
 
 
 *Asignación de excepciones unas a otras
-    DATA(lo_date_ANALYZER) = NEW zcl_lab_58_date_analyzer_dn( ).
+*    DATA(lo_date_ANALYZER) = NEW zcl_lab_58_date_analyzer_dn( ).
+*
+*    TRY.
+*        TRY.
+*            lo_date_ANALYZER->analyze_date( ).
+*          CATCH zcx_lab_56_no_date_dnavas INTO DATA(lx_excep1).
+*            out->write( lx_excep1->get_text( ) ).
+*            out->write( 'Previous....' ).
+*            lo_date_ANALYZER->analyze_format( io_previous = lx_excep1 ).
+*            out->write( lx_excep1->previous->get_text( ) ).
+*        ENDTRY.
+*
+*      CATCH zcx_lab_57_format_unknown_dn INTO DATA(lx_excep2).
+*        out->write( lx_excep2->get_text( ) ).
+*    ENDTRY.
 
-    TRY.
-        TRY.
-            lo_date_ANALYZER->analyze_date( ).
-          CATCH zcx_lab_56_no_date_dnavas INTO DATA(lx_excep1).
-            out->write( lx_excep1->get_text( ) ).
-            out->write( 'Previous....' ).
-            lo_date_ANALYZER->analyze_format( io_previous = lx_excep1 ).
-            out->write( lx_excep1->previous->get_text( ) ).
-        ENDTRY.
 
-      CATCH zcx_lab_57_format_unknown_dn INTO DATA(lx_excep2).
-        out->write( lx_excep2->get_text( ) ).
-    ENDTRY.
+*TEST-INJECTION mostrar los datos cambiados
+**     data(mo_travel) = new zcl_lab_61_travel_dnavas( ).
+*
+*    mo_travel->get_travel( IMPORTING e_flight = data(ls_flight) ).
+*
+*    out->write( |{ ls_flight-carrier_id }-{ ls_flight-connection_id }-{ ls_flight-flight_date } | ).
+
+
+
+*SINGLETON
+*    DATA mo_singleton_1 TYPE REF TO zcl_lab_62_context_dnavas.
+*    DATA mo_singleton_2 TYPE REF TO zcl_lab_62_context_dnavas.
+*
+*    mo_singleton_1 = zcl_lab_62_context_dnavas=>instance( ).
+*    mo_singleton_2 = zcl_lab_62_context_dnavas=>instance( ).
+*
+*    out->write( |SINGLETON 1:  { mo_singleton_1->l_time } | ).
+*    WAIT UP TO 2 SECONDS.
+*    out->write( |SINGLETON 2:  { mo_singleton_2->l_time } | ).
+
+
+*FACTORY METHOD
+*
+*    DATA(mo_factory) = NEW zcl_lab_65_factory_dnavas( ).
+*    DATA mo_FILE TYPE REF TO zif_lab_06_file_dnavas.
+*    DATA: i_adt TYPE REF TO if_oo_adt_classrun_out.
+*
+*    mo_file = mo_factory->create_file( i_file = 'WORK' ).
+*    out->write( MO_file->get_file_type( ) ).
+*    mo_file = mo_factory->create_file( i_file = 'SUPPLY' ).
+*    out->write( MO_file->get_file_type( ) ).
+
+
+*TEMPLATE METHOD
+*    DATA(lo_package_a)  = NEW  zcl_lab_67_package_a_dnavas( ).
+*    DATA(lo_package_B)  = NEW  zcl_lab_68_package_B_dnavas( ).
+*
+*    out->write( |INIT TRAVEL TO PACKAGE A| ).
+*    lo_package_a->travel( i_adt = OUT ).
+*    OUT->write( cl_abap_char_utilities=>newline ).
+*    out->write( |INIT TRAVEL TO PACKAGE B| ).
+*    lo_package_B->travel( i_adt = OUT ).
+
+
+*PATRÓN DISEÑO OBSERVER
+*
+*    DATA(Lo_BLOG) = NEW zcl_lab_69_blog_dnavas( ).
+*    DATA(Lo_ADMIN) = NEW zcl_lab_71_administrator_dn( ).
+*    DATA(Lo_USER) = NEW zcl_lab_72_users_dnavas( ).
+*
+*    SET HANDLER lo_admin->on_notificacion_articulo FOR Lo_BLOG.
+*    SET HANDLER lo_user->on_notificacion_articulo FOR Lo_BLOG.
+*
+*    lo_blog->titulo_articulo( i_titulo = 'Artículo de Deportes-16.06.2026-12:50' ).
+*    out->write( lo_blog->get_titulo_articulo(  ) ).
+*    out->write( |Notificación para los Administradores: { lo_admin->notificacion_admin } | ).
+*    out->write( |Notificación para los Usuarios: { lo_user->notificacion_user } | ).
+*
+*    lo_blog->titulo_articulo( i_titulo = 'Artículo de Economía-25.10.2026-15:33' ).
+*    out->write( lo_blog->get_titulo_articulo(  ) ).
+*    out->write( |Notificación para los Administradores: { lo_admin->notificacion_admin } | ).
+*    out->write( |Notificación para los Usuarios: { lo_user->notificacion_user } | ).
+
+
+
+*MODE->VIEW->CONTROLLER
+    DATA(lo_model) = NEW  zcl_lab_73_model_dnavas( ).
+    DATA(lo_view)  = NEW zcl_lab_74_view_dnavas( ).
+    DATA(lo_controller) = NEW zcl_lab_75_controller_dnavas( ).
+
+    lo_controller->set_model( i_model = lo_model ).
+    lo_controller->get_model( )->set_carrier_id( i_carrier_id = 'AA' ).
+    lo_controller->get_model( )->get_table_flight(
+      RECEIVING
+        rt_flight = DATA(lt_flight)
+    ).
+    lo_controller->set_view( i_view = lo_view ).
+    lo_controller->get_view( )->visualizar_vuelos(
+      it_flight = lt_flight
+      i_print   = out
+    ).
 
 
   ENDMETHOD.
